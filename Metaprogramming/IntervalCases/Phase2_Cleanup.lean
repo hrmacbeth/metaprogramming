@@ -47,7 +47,7 @@ partial def intervalCases (n1 n2 : Nat) (x : Q(Nat)) (h_min : Q($n1 ≤ $x)) (h_
     let h_contra : Q(¬ ($n1 ≤ $n2)) ← mkDecideProof q(¬ ($n1 ≤ $n2))
     let pf : Q($t) := q(absurd (Nat.le_trans $h_min $h_max) $h_contra)
     g.assign pf
-    pure []
+    return []
   else
     let n1' : Nat := n1 + 1
     let split : Q($n1 = $x ∨ $n1' ≤ $x) := q(eq_or_le_succ_of_le $h_min)
@@ -57,7 +57,7 @@ partial def intervalCases (n1 n2 : Nat) (x : Q(Nat)) (h_min : Q($n1 ≤ $x)) (h_
     let G2 ← intervalCases n1' n2 x (.fvar f_min') h_max g2
     let pf : Q($t) := q(Or.elim $split $e1 $e2)
     g.assign pf
-    pure (e1.mvarId! :: G2)
+    return (e1.mvarId! :: G2)
 
 /-! ### Task (ii): streamline the user syntax for `my_interval_cases`
 

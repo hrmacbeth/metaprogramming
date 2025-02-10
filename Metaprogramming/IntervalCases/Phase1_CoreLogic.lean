@@ -55,7 +55,7 @@ partial def intervalCases (n1 n2 : Nat) (x : Q(Nat)) (h_min : Q($n1 ≤ $x)) (h_
   trace[debug] "our goal is {t}"
   let pf : Q($t) := q(sorry)
   g.assign pf
-  pure []
+  return []
 
 /-
 The task in this file is to fill in (without sorries) the body of the above `intervalCases`
