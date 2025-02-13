@@ -27,11 +27,11 @@ function are
 * expressions (`Expr`) called `x`, `h_min` and `h_max`, where
   `x` is assumed to represent a natural number,
   `h_min` is assumed to represent a proof of the statement `n1 ≤ x`, and
-  `h_max` is assumed to represent a proof of the statement `x ≤ n1`;
+  `h_max` is assumed to represent a proof of the statement `x ≤ n2`;
 * a metavariable (`MVarId`) called `g`
 
 and the output (in the monad `MetaM`) to this function is a list of metavariables (the subgoals
-produced by the tactic.)
+produced by the tactic).
 -/
 #check Expr
 #check MVarId
@@ -99,7 +99,7 @@ set_option trace.debug true
 /-! Here's a test for the tactic.
 
 I have turned on a few diagnostics here.
-* `show_term` shows us the (partial) proof term our tactic produced
+* `show_term` shows us the (partial) proof term our tactic produced (initially, just `sorry`)
 * `set_option trace.debug true` turns on the display of the "debug" trace channel. We can post
   messages to this channel within the tactic logic using the syntax `trace[debug] "blah blah"`.
 -/
