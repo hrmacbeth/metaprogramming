@@ -3,6 +3,7 @@ import Mathlib
 /-! ### Lemmas to tag @[cancel] -/
 
 #check lt_of_add_lt_add_right
+#check lt_of_mul_lt_mul_left
 
 /-! ### Tests -/
 
