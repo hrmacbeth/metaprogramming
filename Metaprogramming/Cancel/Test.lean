@@ -51,6 +51,7 @@ example {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] (f : X → Y)
   exact h
 
 example {a x y : ℝ} (h : Real.cos (x + a) ≤ Real.cos (y + a)) : True := by
-  apply le_of_cos_le_cos sorry sorry at h
+  apply le_of_cos_le_cos at h
   apply le_of_add_le_add_right at h
   trivial
+  all_goals sorry
