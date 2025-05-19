@@ -6,6 +6,15 @@ open Real Set
 
 #check lt_of_add_lt_add_right
 #check lt_of_mul_lt_mul_left
+#check add_left_cancel
+
+theorem lt_of_inv_lt_inv₀ {G₀ : Type*} [GroupWithZero G₀] [PartialOrder G₀] [ZeroLEOneClass G₀]
+    [PosMulReflectLT G₀] {a b : G₀} [MulPosStrictMono G₀] [PosMulStrictMono G₀] (ha : 0 < a) :
+    a⁻¹ < b⁻¹ → b < a := by
+  intro h
+  rwa [inv_lt_inv₀ ha] at h
+  rw [← inv_pos] at ha ⊢
+  exact ha.trans h
 
 lemma smul_left_injective₀
     {R M : Type*} [Ring R] [AddCommGroup M] [Module R M] [NoZeroSMulDivisors R M]
@@ -13,9 +22,15 @@ lemma smul_left_injective₀
    rwa [← sub_eq_zero, ← sub_smul, smul_eq_zero_iff_left hx, sub_eq_zero] at h
 
 alias ⟨Topology.IsInducing.of_specializes, _⟩ := Topology.IsInducing.specializes_iff
+
 theorem le_of_cos_le_cos {a b : ℝ} (ha : a ∈ Icc 0 π) (hb : b ∈ Icc 0 π) (h : cos a ≤ cos b) :
     b ≤ a := by
   rwa [← Real.strictAntiOn_cos.le_iff_le ha hb]
+
+
+-- add in an "unfolded" version so that our @[cancel] check works
+#check exp_injective
+#check Real.injOn_cos
 
 
 /-! ### Tests -/
@@ -23,6 +38,20 @@ theorem le_of_cos_le_cos {a b : ℝ} (ha : a ∈ Icc 0 π) (hb : b ∈ Icc 0 π)
 example {a b x y : ℝ} (h : 0 ≤ a) (h : a * x + b < a * y + b) : True := by
   apply lt_of_add_lt_add_right at h
   replace h := lt_of_mul_lt_mul_left h (by positivity)
+  trivial
+
+example {a b x y : ℝ} (h : exp (3 + x) = exp (3 + y)) : True := by
+  apply exp_injective at h
+  apply add_left_cancel at h
+  trivial
+
+example {x y : ℝ} (h : cos x = cos y) : True := by
+  apply Real.injOn_cos at h
+  trivial
+  all_goals sorry
+
+example {x y : ℝ} (hx : 0 < x) (h : x⁻¹ < y⁻¹) : True := by
+  apply lt_of_inv_lt_inv₀ (by positivity) at h
   trivial
 
 example {R : Type*} [Monoid R] {a b x : R} (ha : IsUnit x) (h : a * x = b * x) : True := by
