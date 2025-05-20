@@ -4,6 +4,15 @@ import Lean.ScopedEnvExtension
 
 open Lean Meta
 
+#check Expr.isFVar
+#check Expr.fvarId!
+#check Expr.constName?
+#check Expr.getAppFn
+#check Expr.getAppFnArgs
+#check Name.anonymous
+
+#check isProof
+
 /-- Parse a lemma to see whether it has the correct form for a "cancellation" (`cancel`) lemma. Such
 lemmas must have a conclusion of a form such `x₁ ∼ x₂`; that is, a relation between two free
 variables.
@@ -18,6 +27,12 @@ If the given declaration is a valid `@[cancel]` lemma, we return the relation `~
 identified in the key hypothesis, together with the index of the "varying" argument pair in the
 argument list of `f`. -/
 def parseCancelLemma (decl : Name) : MetaM (Name × Name × Nat) := do
+  let declTy := (← getConstInfo decl).type
+  withReducible <| forallTelescopeReducing declTy fun xs targetTy => do
+  -- extract the last hypothesis
+  let hypTy ← inferType xs[xs.size - 1]!
+  -- check that `targetTy` and `hypTy` have the right form,
+  -- and if so, return the relation, function and argument index
   sorry
 
 /-- Environment extension for "cancellation" (`cancel`) lemmas. -/
